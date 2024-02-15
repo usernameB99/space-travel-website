@@ -10,12 +10,12 @@
     --clr-white: 0 0% 100%;
 
     /* fonst sizes */
-    --fs-900: 9.375rem;
-    --fs-800: 6.25rem;
-    --fs-700: 3.5rem;
-    --fs-600: 2rem;
+    --fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
+    --fs-800: 3.5rem;
+    --fs-700: 1.5rem;
+    --fs-600: 1rem;
     --fs-500: 1.75rem;
-    --fs-400: 1.125rem;
+    --fs-400: 0.9375rem;
     --fs-300: 1rem;
     --fs-200: 0.875rem;
 
@@ -23,6 +23,28 @@
      --ff-serif: "Bellefair", serif;
      --ff-sans-cond: "Barlow Condensed", sans-serif;
      --ff-sans-normal: "Barlow", sans-serif;
+}
+
+@media (min-width: 35rem) {
+    :root {
+        --fs-800: 5rem;
+        --fs-700: 2.5rem;
+        --fs-600: 1.5rem;
+        --fs-400: 1rem;
+    }
+}
+
+@media (min-width: 45rem) {
+    :root {
+        /* font-sizes */
+        --fs-800: 6.25rem;
+        --fs-700: 3.5rem;
+        --fs-600: 2rem;
+        --fs-500: 1.75rem;
+        --fs-400: 1.125rem;
+        --fs-300: 1rem;
+        --fs-200: 0.875rem;
+    }
 }
 
 /* ----------------------------- */
@@ -68,6 +90,9 @@ body {
     background-color: hsl( var(--clr-dark) );
     line-height: 1.5;
     min-height: 100vh;
+
+    display: grid;
+    grid-template-rows: min-content 1fr;
 }
 
 /* make images easier to work with */
@@ -108,14 +133,23 @@ select {
     gap: var(--gap, 1rem);
 }
 
+/* .flex.even-columns > * {
+    width: 100%;
+    outline: 1px solid limegreen;
+} */
+
 .grid {
     display: grid;
     gap: var(--gap, 1rem);
 }
 
+.d-block {
+    display: block;
+}
+
 .flow > *:where(:not(:first-child)) { /* if has sibling before || not the last child -> (> * + * ) || (> *:not(:first-child)) // // first element has no space on the top and last element has no space on the bottom */
     margin-top: var(--flow-space, 1rem);
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
 }
 
 .container {
@@ -123,6 +157,51 @@ select {
     margin-inline: auto;
     max-width: 80rem;
 }
+
+.grid-container {
+    text-align: center;
+    border: 5px solid limegreen;
+    display: grid;
+    place-items: center;
+    padding-inline: 1rem;
+}
+
+.grid-container * {
+    max-width: 50ch;
+}
+
+@media (min-width: 45rem) {
+    .grid-container {
+        text-align: left;
+        column-gap: var(--container-gap, 2rem);
+        grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0px, 30rem)) minmax(1rem, 1fr);
+    }
+    
+    .grid-container > *:first-child {
+        grid-column: 2;
+        outline: 1px solid red;
+    }
+
+    .grid-container > *:last-child {
+        grid-column: 3;
+        outline: 1px solid yellow;
+    }
+
+    .grid-container--home {
+        padding-bottom: max(6rem, 20vh);
+        align-items: end;
+    }
+
+}
+
+.grid-container > *:first-child {   /* just for see where items blah */
+    outline: 1px solid red;
+}
+
+.grid-container > *:last-child {   /* just for see where items blah */
+    outline: 1px solid yellow;
+}
+
 
 .sr-only {                   /* screen reader only */
     position: absolute;
@@ -187,4 +266,154 @@ select {
     margin-right: .5em;
     font-weight: 700;
     color: hsl( var(--clr-white) / .25 );
+}
+
+/* ----------------------------- */
+/*          Components           */
+/* ----------------------------- */
+
+.large-button {
+    font-size: 2rem;
+    position: relative;
+    display: inline-grid;
+    z-index: 1;
+    place-items: center;
+    padding: 0 2em;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    text-decoration: none;
+}
+
+.large-button::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    background: hsl( var(--clr-white) / .15);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 300ms linear, transform 550ms ease-in-out;
+}
+
+.large-button:hover::after,
+.large-button:focus::after {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.primary-navigation {
+    --gap: 8rem;
+    --underline-gap: 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.primary-navigation a {
+    text-decoration: none;
+}
+
+.primary-navigation a > span {
+    font-weight: 700;
+    margin-right: .5em;
+}
+
+.underline-indicators > * {
+    cursor: pointer;
+    padding: var(--underline-gap, 1rem) 0;
+    border: 0;
+    border-bottom: .2rem solid hsl( var(--clr-white) / 0 );
+}
+
+.underline-indicators > *:hover,
+.underline-indicators > *:focus {
+    border-color: hsl( var(--clr-white) / .5 );
+}
+
+.underline-indicators > .active,
+.underline-indicators > [aria-selected="true"] {
+    color: hsl( var(--clr-white) / 1 );
+    border-color: hsl( var(--clr-white) / 1 );
+}
+
+.tab-list {
+    --gap: 2rem;
+}
+
+.dot-indicators > * {
+    cursor: pointer;
+    border: 0;
+    border-radius: 50%;
+    padding: .5em;
+    background-color: hsl( var(--clr-white) / .25);
+}
+
+.dot-indicators > *:hover,
+.dot-indicators > *:focus {
+
+    background-color: hsl( var(--clr-white) / .5);
+}
+
+.dot-indicators > [aria-selected="true"] {
+    background-color: hsl( var(--clr-white) / 1 );
+}
+
+/* idk */
+
+.numbered-indicators {
+    position: relative;
+    display: grid;
+    z-index: 1;
+    place-items: center;
+    padding: 0 2em;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    text-decoration: none;
+}
+
+.numbered-indicators::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    background: hsl( var(--clr-white) / .15);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 300ms linear, transform 550ms ease-in-out;
+}
+
+.numbered-indicators:hover::after,
+.numbered-indicators:focus::after {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+/* ----------------------------- */
+/*   Page specific background    */
+/* ----------------------------- */
+
+body {
+    background-size: cover;
+    background-position: bottom center;
+}
+
+/* home */
+
+.home {
+    background-image: url(./assets/home/background-home-mobile.jpg);
+}
+
+@media (min-width: 35rem) {
+    .home {
+        background-position: center center;
+        background-image: url(./assets/home/background-home-tablet.jpg);
+    }
+}
+
+@media (min-width: 45rem) {
+    .home {
+        background-image: url(./assets/home/background-home-desktop.jpg);
+    }
 }
