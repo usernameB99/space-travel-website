@@ -578,6 +578,7 @@ body {
 .grid-container--destination > picture {
     grid-area: image;
     max-width: 60%;
+    align-self: start;
 }
 
 .grid-container--destination > .tab-list {
@@ -698,6 +699,7 @@ body {
     }
 
     .grid-container--crew > .dot-indicators {
+        /* grid-column: span 2; */
         justify-self: start;
     }
 
